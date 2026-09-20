@@ -15,7 +15,7 @@ Matrix Matrix::residueRingSum(const Matrix& other, int modulus) const
 	assert(modulus >= 2);
 	Matrix answer(rows, cols);
 	if (rows != other.rows || cols != other.cols) {
-		throw std::invalid_argument("Матрицы должны быть одинакового размера!");
+		throw std::invalid_argument("Матрицы должны быть одинакового размера!");//проверка, что матрицы можно сложить
 	}
 	else {
 		for (auto r = 0; r < answer.rows; ++r) {
@@ -39,13 +39,18 @@ Matrix Matrix::residueRingMul(const Matrix& other, int modulus) const
 		for (auto r = 0; r < rows; ++r) {
 			for (auto c = 0; c < other.cols; ++c) {
 				for (auto k = 0; k < cols; ++k) {
-					answer.matrix[r][c] += (static_cast<int>(matrix[r][k]) * static_cast<int>(other.matrix[k][c])) % modulus; 
-				}
+					answer.matrix[r][c] += (static_cast<int>(matrix[r][k]) * static_cast<int>(other.matrix[k][c])) % modulus; //в ячейку добавляется число по модулю
+				}//статик каст предполагает, что пользователь вводил целые числа, чтобы 5.0 конвертировалось в 5. Например если юзер ввел 5.4, то потеря дробнйо части (пока что) не будет компенсирована 
 				answer.matrix[r][c] = static_cast<int>(static_cast<int>(answer.matrix[r][c]) % modulus + modulus) % modulus; //
 			}
 		}
 	}
 	return answer;	
+}
+
+std::vector<std::vector<double>>& Matrix::getMatrix() //геттер матрицы, т.к она у нас в привате
+{
+	return matrix;
 }
 
 void Matrix::output() const {
@@ -57,10 +62,10 @@ void Matrix::output() const {
 	}
 }
 
-Matrix Matrix::operator+(const Matrix& other) const {
+Matrix Matrix::operator+(const Matrix& other) const { 
 	Matrix answer(rows, cols);
 	if (rows != other.rows || cols != other.cols) {
-		throw "other matrix has another size";
+		throw std::invalid_argument("other matrix has another size");
 	}
 	else {
 		for (auto r = 0; r < matrix.size(); ++r) {
@@ -75,7 +80,7 @@ Matrix Matrix::operator+(const Matrix& other) const {
 Matrix Matrix::operator-(const Matrix& other) const {
 	Matrix answer(rows, cols);
 	if (rows != other.rows || cols != other.cols) {
-		throw "other matrix has another size";
+		throw std::invalid_argument("other matrix has another size");
 	}
 	else {
 		for (auto r = 0; r < matrix.size(); ++r) {
@@ -107,8 +112,8 @@ Matrix Matrix::operator*(const Matrix& other) const
 	for (auto r = 0; r < rows; ++r) {
 		for (auto c = 0; c < other.cols; ++c) {
 			for (auto k = 0; k < cols; ++k) {
-				answer.matrix[r][c] += matrix[r][k] * other.matrix[k][c]; // A(
-			}
+				answer.matrix[r][c] += matrix[r][k] * other.matrix[k][c]; //формула для перемножения матриц. Если честно, чутьчуть помог чатгпт с ней
+			}	//но как я понял: мы берем строку из 1 матрицы, столбец из 2 и потом столбцы из 1 и умножаем строку1 столбец1 на столбец1 столбец2, у нас получается что k = колву чисел в строке1 = колву чисел в столбце2
 		}
 	}
 

@@ -6,8 +6,8 @@
 int main(int argc, char* argv[])
 {
 	QApplication app(argc,argv);
-	UserInterface ui;
-	ui.show();
+	UserInterface UserInterface;
+	UserInterface.show();
 	try
 	{
 		
